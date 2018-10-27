@@ -36,6 +36,24 @@ def get_X_Y_test():
 
 	return X, Y
 
+def random_partition(X, Y):
+	train_size = int(0.7*len(X))
+	test_size = len(X) - train_size
+
+	mask = np.array([True]*train_size + [False]*test_size)
+	np.random.shuffle(mask)
+
+	assert len(mask) == len(X)
+	assert len(mask) == len(Y)
+
+	X_train = X[mask]
+	Y_train = Y[mask]
+	X_validation = X[~mask]
+	Y_validation = Y[~mask]
+
+	return 	X_train, Y_train, X_validation, Y_validation
+
+
 # "PRIVATE" METHODS
 
 def _get_data_file_full_path_by_name(name):
