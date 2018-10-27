@@ -16,8 +16,8 @@ NUMBER_OF_MOVIES = 99
 NUMBER_OF_USERS_TRAIN = 10000
 NUMBER_OF_USERS_TEST = 2931
 
-# X: for 1000 users, 2 rows - first is the rating of 99 movies, second is the date for each rating
-# Y: for 1000 users, rating and date for the "miss congeniality" film
+# X: for 1000 users, 2 rows - first is the date of 99 movies, second is the rating for each rating
+# Y: for 1000 users, (date, rating) for the "miss congeniality" film
 def get_X_Y_train():
 	Y = _get_Y(train=True)
 	X = _get_X(train=True)
