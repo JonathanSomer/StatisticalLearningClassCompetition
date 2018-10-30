@@ -1,5 +1,6 @@
 import numpy as np
 import os.path
+from datetime import date
 
 DATA_BASE_DIR = './data'
 
@@ -47,18 +48,35 @@ def get_X_Y_test():
 def get_movies_dates():
     with open(_get_data_file_full_path_by_name(MOVIE_DATES)) as f:
         lines = f.readlines()
-    lines = [_get_date_from_year_number(int(x.split(',')[0].strip()))
+    lines = [_transform_year_to_days_since_epoch(int(x.split(',')[0].strip()))
              for x in lines[:NUMBER_OF_MOVIES]]
     return np.array(lines, dtype='float')
 
 
 def get_output_movie_date():
-    return _get_date_from_year_number(OUTPUT_MOVIE_YEAR)
-
+    return _transform_year_to_days_since_epoch(OUTPUT_MOVIE_YEAR)
 
 def random_partition(X, Y):
     train_size = int(0.7*len(X))
     test_size = len(X) - train_size
+
+    mask = np.array([True]*train_size + [False]*test_size)
+    np.random.shuffle(mask)
+
+    assert len(mask) == len(X)
+    assert len(mask) == len(Y)
+
+    X_train = X[mask]
+    Y_train = Y[mask]
+    X_validation = X[~mask]
+    Y_validation = Y[~mask]
+
+    return X_train, Y_train, X_validation, Y_validation
+
+
+def random_partition_one(X, Y):
+    train_size = len(X) - 1
+    test_size = 1
 
     mask = np.array([True]*train_size + [False]*test_size)
     np.random.shuffle(mask)
@@ -80,11 +98,10 @@ def _get_data_file_full_path_by_name(name):
     return os.path.join(DATA_BASE_DIR, name)
 
 
-def _get_date_from_year_number(year):
-    from datetime import date
-    d0 = date(2008, 7, 1)
+def _transform_year_to_days_since_epoch(year):
+    d0 = date(year, 7, 1)
     d1 = date(1997, 1, 1)
-    delta = d1 - d0
+    delta = d0 - d1
     return float(delta.days)
 
 

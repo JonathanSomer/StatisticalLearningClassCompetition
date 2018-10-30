@@ -13,3 +13,9 @@ def fill_with_mean(X):
 
 def fill_with_zeros(X):
     return np.nan_to_num(X)
+
+
+def fill_with_num(X, num):
+    filled_matrix = fill_with_zeros(X)
+    filled_matrix[filled_matrix == 0] = num
+    return filled_matrix
