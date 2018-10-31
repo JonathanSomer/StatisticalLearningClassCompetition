@@ -56,8 +56,8 @@ def get_movies_dates():
 def get_output_movie_date():
     return _transform_year_to_days_since_epoch(OUTPUT_MOVIE_YEAR)
 
-def random_partition(X, Y):
-    train_size = int(0.7*len(X))
+def random_partition(X, Y, training_fraction = 0.7):
+    train_size = int(training_fraction*len(X))
     test_size = len(X) - train_size
 
     mask = np.array([True]*train_size + [False]*test_size)
