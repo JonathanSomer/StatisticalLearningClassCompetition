@@ -2,7 +2,7 @@ import numpy as np
 import os.path
 from datetime import date
 
-DATA_BASE_DIR = './data'
+DATA_BASE_DIR = './raw_data'
 
 TEST_X_DATES = 'test_dates_all.txt'
 TEST_X_RATINGS = 'test_ratings_all.txt'
@@ -21,8 +21,8 @@ NUMBER_OF_USERS_TEST = 2931
 
 OUTPUT_MOVIE_YEAR = 2000
 
-# X: for 1000 users, 2 rows - first is the date of 99 movies, second is the rating for each rating
-# Y: for 1000 users, (date, rating) for the "miss congeniality" film
+# X: for 10000 users, 2 rows - first is the date of 99 movies, second is the rating for each rating
+# Y: for 10000 users, (date, rating) for the "miss congeniality" film
 
 
 def get_X_Y_train():
@@ -63,9 +63,6 @@ def random_partition(X, Y, training_fraction = 0.7):
     mask = np.array([True]*train_size + [False]*test_size)
     np.random.shuffle(mask)
 
-    assert len(mask) == len(X)
-    assert len(mask) == len(Y)
-
     X_train = X[mask]
     Y_train = Y[mask]
     X_validation = X[~mask]
@@ -80,9 +77,6 @@ def random_partition_one(X, Y):
 
     mask = np.array([True]*train_size + [False]*test_size)
     np.random.shuffle(mask)
-
-    assert len(mask) == len(X)
-    assert len(mask) == len(Y)
 
     X_train = X[mask]
     Y_train = Y[mask]
