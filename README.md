@@ -7,7 +7,9 @@
 
 ## How to use this repo:
 1. write a regressor which implements the BaseRegressor interface (see `regressors/base_regressor.py`)
-2. run the `main.ipynb` notebook, import the class and add it to the regressors array.
+2. start the `main.ipynb` notebook.
+3. import the regressor class you wrote and add it to the regressors array.
+4. run the notebook
 
 
 ## Main Insights:
