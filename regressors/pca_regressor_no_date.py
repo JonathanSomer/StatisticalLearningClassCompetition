@@ -1,8 +1,7 @@
 import numpy as np
 from sklearn.decomposition import PCA
 
-
-class PCAOnlyRatingsRegresor(object):
+class PcaRegressorNoDate(object):
     def __init__(self, number_of_componnent, regresor):
         self._number_of_componnent = number_of_componnent
         self._pca = PCA(n_components=number_of_componnent)

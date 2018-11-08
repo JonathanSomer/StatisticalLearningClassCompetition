@@ -2,7 +2,7 @@ import numpy as np
 from sklearn.linear_model import LinearRegression
 from regressors.base_regressor import BaseRegressor
 
-class NaiveRegresor(BaseRegressor):
+class NaiveRegressor(BaseRegressor):
     def __init__(self):
         self._reg = LinearRegression()
 
