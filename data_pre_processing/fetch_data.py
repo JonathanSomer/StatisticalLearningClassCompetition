@@ -100,7 +100,6 @@ def _transform_year_to_days_since_epoch(year):
 
 
 def _get_X(train=True):
-    import pdb; pdb.set_trace()
     X = []
 
     dates_file_name = TRAIN_X_DATES if train else TEST_X_DATES
