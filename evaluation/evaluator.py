@@ -1,25 +1,29 @@
 from tabulate import tabulate
 from data_pre_processing.fetch_data import *
 import numpy as np
-from progressbar import progressbar
+
+
+N_RUNS = 50
 
 # 'regressors' is an array of objects implementing the BaseRegressor Interface
-def perform_benchmark(regressors):
-	_plot_benchmark_results(_evaluate_regressors(regressors))
+def perform_benchmark(regressors, n_runs = N_RUNS):
+	_plot_benchmark_results(_evaluate_regressors(regressors, n_runs))
 
 
 # PRIVATE:
 
-def _evaluate_regressors(regressors):
+def _evaluate_regressors(regressors, n_runs):
 	map_regressor_to_scores = { str(regressor): [] for regressor in regressors }
 
-	for X_train, Y_train, X_test, Y_test in progressbar(training_data_partition_generator()):
+	for X_train, Y_train, X_test, Y_test in training_data_partition_generator(n_runs):
 		
 		for regressor in regressors:
 			
-			regressor.fit(X_train, Y_train)
-			predictions = regressor.predict(X_test)
-			score = _rmse(predictions, Y_test[:,1])
+			_X_train, _Y_train, _X_test, _Y_test = np.copy(X_train), np.copy(Y_train), np.copy(X_test), np.copy(Y_test)
+			
+			regressor.fit(_X_train, _Y_train)
+			predictions = regressor.predict(_X_test)
+			score = _rmse(predictions, _Y_test[:,1])
 
 			map_regressor_to_scores[str(regressor)].append(score)
 
@@ -37,7 +41,7 @@ def _plot_benchmark_results(map_regressor_to_scores):
 def _rmse(predictions, targets):
 	return np.sqrt(np.mean((predictions-targets)**2))
 	
-def training_data_partition_generator(n_runs = 10):
+def training_data_partition_generator(n_runs):
 	current_run = 0
 	while current_run < n_runs:
 		yield random_partition(*get_X_Y_train())
