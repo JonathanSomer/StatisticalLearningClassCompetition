@@ -11,6 +11,6 @@ class BaseRegressor(object):
     def predict(self, X):
         raise NotImplementedError("Must implement a predict method")
 
-    @abstractmethod # This should be an indicative name, later used in the benchmark table
+    @abstractmethod # This should be an unique name, later used in the benchmark table
     def __str__(self):
     	return "Base Regressor"

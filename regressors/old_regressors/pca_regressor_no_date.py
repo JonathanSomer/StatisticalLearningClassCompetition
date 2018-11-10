@@ -1,8 +1,9 @@
 import numpy as np
 from sklearn.decomposition import PCA
 from sklearn.linear_model import LinearRegression
+from regressors.base_regressor import BaseRegressor
 
-class PcaRegressorNoDate(object):
+class PcaRegressorNoDate(BaseRegressor):
     def __init__(self, number_of_componnent = 5, regresor = LinearRegression()):
         self._number_of_componnent = number_of_componnent
         self._pca = PCA(n_components=number_of_componnent)
