@@ -54,7 +54,9 @@ def get_movies_dates():
 
 
 def get_output_movie_date():
-    return _transform_year_to_days_since_epoch(OUTPUT_MOVIE_YEAR)
+    # return _transform_year_to_days_since_epoch(OUTPUT_MOVIE_YEAR)
+    X_train, Y_train = get_X_Y_train()
+    return np.min(Y_train[:,0])
 
 def random_partition(X, Y, training_fraction = 0.9):
     train_size = int(training_fraction*len(X))

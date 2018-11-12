@@ -1,7 +1,7 @@
-*__pycache__/*
+**/__pycache__/*
 data/.DS_Store
 .vs/*
 .ipynb_checkpoints/
 regressors/__pycache__/
-evaluation/__pycache__/
+evaluation/__pycache__/*
 data_pre_processing/__pycache__/
