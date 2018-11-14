@@ -1,13 +1,14 @@
 import numpy as np
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import Ridge
 from regressors.base_regressor import BaseRegressor
 from data_pre_processing.clean_data import remove_bad_movies
 from data_pre_processing.fill_missing_values import fill_ratings_with_mean_per_user
 
-class FillWithMeanPerUserCleanMoviesRegressor(BaseRegressor):
+class FillWithMeanPerUserCleanMoviesRidgeRegressor(BaseRegressor):
 
-    def __init__(self):
-        self._reg = LinearRegression()
+    def __init__(self, alpha):
+        self.alpha = alpha
+        self._reg = Ridge(alpha = alpha)
         self.bad_movie_indexes = None
 
     def fit(self, X, Y):
@@ -21,7 +22,7 @@ class FillWithMeanPerUserCleanMoviesRegressor(BaseRegressor):
         return self._reg.predict(X)
 
     def __str__(self):
-        return "Fill With Mean Per User + Clean Movies"
+        return "Fill With Mean Per User + Clean Movies + Ridge {}".format(self.alpha)
 
 
     def _prepare_X(self, X_raw):

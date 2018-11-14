@@ -14,7 +14,7 @@ class FillWithMeanPerUserRegressor(BaseRegressor):
         assert len(X.shape) == 3
         X = self._prepare_X(X)
         
-        self._reg = self._reg.fit(X, Y[:, 1])
+        self._reg = self._reg.fit(X, Y)
 
     def predict(self, X):
         assert len(X.shape) == 3

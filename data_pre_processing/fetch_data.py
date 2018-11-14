@@ -21,28 +21,28 @@ NUMBER_OF_USERS_TEST = 2931
 
 OUTPUT_MOVIE_YEAR = 2000
 
-# X: for 10000 users, 2 rows - first is the date of 99 movies, second is the rating for each rating
+
+
+# X: for 10000 users, 3 rows:
+# first: date of 99 movies, 
+# second: rating for each movie, 
+# third: date of target movie prediciton
 # Y: for 10000 users, (date, rating) for the "miss congeniality" film
-
-
 def get_X_Y_train():
-    Y = _get_Y(train=True)
     X = _get_X(train=True)
+    Y = _get_Y()
 
-    assert X.shape == (NUMBER_OF_USERS_TRAIN, 2, NUMBER_OF_MOVIES)
-    assert Y.shape == (NUMBER_OF_USERS_TRAIN, 2)
+    assert X.shape == (NUMBER_OF_USERS_TRAIN, 3, NUMBER_OF_MOVIES)
+    assert Y.shape == (NUMBER_OF_USERS_TRAIN,)
 
     return X, Y
 
 
-def get_X_Y_test():
-    Y = _get_Y(train=False)
+def get_X_test():
     X = _get_X(train=False)
+    assert X.shape == (NUMBER_OF_USERS_TEST, 3, NUMBER_OF_MOVIES)
 
-    assert X.shape == (NUMBER_OF_USERS_TEST, 2, NUMBER_OF_MOVIES)
-    assert Y.shape == (NUMBER_OF_USERS_TEST, 1)
-
-    return X, Y
+    return X
 
 
 def get_movies_dates():
@@ -55,8 +55,8 @@ def get_movies_dates():
 
 def get_output_movie_date():
     # return _transform_year_to_days_since_epoch(OUTPUT_MOVIE_YEAR)
-    X_train, Y_train = get_X_Y_train()
-    return np.min(Y_train[:,0])
+    X_train, _ = get_X_Y_train()
+    return np.min(X_train[:,2,0])
 
 def random_partition(X, Y, training_fraction = 0.9):
     train_size = int(training_fraction*len(X))
@@ -106,6 +106,7 @@ def _get_X(train=True):
 
     dates_file_name = TRAIN_X_DATES if train else TEST_X_DATES
     ratings_file_name = TRAIN_X_RATINGS if train else TEST_X_RATINGS
+    target_movie_dates_file_name = TRAIN_Y_DATES if train else TEST_Y_DATES
 
     with open(_get_data_file_full_path_by_name(dates_file_name)) as f:
         for line in f:
@@ -119,27 +120,25 @@ def _get_X(train=True):
             assert len(ratings) == NUMBER_OF_MOVIES
             X[line_number].append(ratings)
 
+    with open(_get_data_file_full_path_by_name(target_movie_dates_file_name)) as f:
+        for line_number, line in enumerate(f):
+            date = int(line.split()[0])
+            X[line_number].append(np.repeat(date, NUMBER_OF_MOVIES))
+            # X[line_number].append([date])
+
     X = np.array(X, dtype='float')
     X[X == 0] = np.nan
 
     return X
 
 
-def _get_Y(train=True):
+def _get_Y():
     Y = []
 
-    dates_file_name = TRAIN_Y_DATES if train else TEST_Y_DATES
-
-    with open(_get_data_file_full_path_by_name(dates_file_name)) as f:
-        for line in f:
-            date = int(line.split()[0])
-            Y.append([date])
-
-    if train:
-        with open(_get_data_file_full_path_by_name(TRAIN_Y_RATINGS)) as f:
-            for line_number, line in enumerate(f):
-                rating = int(line.split()[0])
-                Y[line_number].append(rating)
+    with open(_get_data_file_full_path_by_name(TRAIN_Y_RATINGS)) as f:
+        for line_number, line in enumerate(f):
+            rating = int(line.split()[0])
+            Y.append(rating)
 
     Y = np.array(Y, dtype='float')
     Y[Y == 0] = np.nan

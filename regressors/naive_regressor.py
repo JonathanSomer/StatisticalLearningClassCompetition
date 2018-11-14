@@ -11,12 +11,16 @@ class NaiveRegressor(BaseRegressor):
     def fit(self, X, Y):
         assert len(X.shape) == 3
         X = np.nan_to_num(X)
-        X = X.reshape(X.shape[0], -1)
-        self._reg = self._reg.fit(X, Y[:, 1])
+        X = self._flatten_X(X)
+        self._reg = self._reg.fit(X, Y)
 
     def predict(self, X):
         X = np.nan_to_num(X)
-        return self._reg.predict(X.reshape(X.shape[0], -1))
+        X = self._flatten_X(X)
+        return self._reg.predict(X)
 
     def __str__(self):
         return "NaiveRegressor"
+
+    def _flatten_X(self, X):
+        return X.reshape(X.shape[0], -1)[:,:199]
