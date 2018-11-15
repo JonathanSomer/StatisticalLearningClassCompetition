@@ -26,7 +26,7 @@ class DLRegressor(BaseRegressor):
         assert len(X.shape) == 3
         X = self._prepare_X(X, Y, train = True)
         self._reg = self._model(X)
-        self._reg.fit(X, Y[:, 1], epochs = self.n_epochs)
+        self._reg.fit(X, Y, epochs = self.n_epochs)
 
     def predict(self, X):
         assert len(X.shape) == 3
