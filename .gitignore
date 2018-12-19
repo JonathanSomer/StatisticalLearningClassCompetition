@@ -4,4 +4,9 @@ data/.DS_Store
 .ipynb_checkpoints/
 regressors/__pycache__/
 evaluation/__pycache__/*
+evaluation/__pycache__/
 data_pre_processing/__pycache__/
+evaluation/__pycache__/__init__.cpython-36.pyc
+evaluation/__pycache__/evaluator.cpython-36.pyc
+
+evaluation/__pycache__/**
