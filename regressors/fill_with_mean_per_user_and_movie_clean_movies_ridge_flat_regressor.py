@@ -2,15 +2,15 @@ import numpy as np
 from sklearn.linear_model import Ridge
 from regressors.base_regressor import BaseRegressor
 from data_pre_processing.clean_data import remove_bad_movies
-from data_pre_processing.fill_missing_values import fill_ratings_with_mean_per_user
+from data_pre_processing.fill_missing_values import fill_ratings_with_mean_per_user, fill_ratings_with_mean_per_user_and_movie
 
-class FillWithMeanPerUserCleanMoviesRidgeFlatRegressor(BaseRegressor):
+class FillWithMeanPerUserAndMovieCleanMoviesRidgeFlatRegressor(BaseRegressor):
 
-    def __init__(self, alpha=10, minim=1.3, maxim=4.7):
+    def __init__(self, ridge_alpha=10, minim=1.3, maxim=4.7, alpha=0.5):
         self.alpha = alpha
         self.minim = minim
         self.maxim = maxim
-        self._reg = Ridge(alpha = alpha)
+        self._reg = Ridge(alpha = ridge_alpha)
         self.bad_movie_indexes = None
 
     def fit(self, X, Y):
@@ -32,7 +32,7 @@ class FillWithMeanPerUserCleanMoviesRidgeFlatRegressor(BaseRegressor):
 
     def _prepare_X(self, X_raw):
         X_raw, self.bad_movie_indexes = remove_bad_movies(X_raw, self.bad_movie_indexes)
-        X, _ = fill_ratings_with_mean_per_user(X_raw)
+        X = fill_ratings_with_mean_per_user_and_movie(X_raw, self.alpha)
         X = X[:,1,:] # only ratings
 
         return X.reshape(X.shape[0], -1)
